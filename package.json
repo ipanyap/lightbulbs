@@ -4,7 +4,24 @@
   "description": "",
   "private": true,
   "scripts": {
+    "build": "npm run build --workspaces",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ivan Jayadi"
+  "author": "Ivan Jayadi",
+  "license": "LGPL-3.0-or-later",
+  "workspaces": [
+    "api",
+    "web"
+  ],
+  "dependencies": {
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "eslint": "^8.52.0",
+    "prettier": "^3.0.3",
+    "ts-node": "^10.9.1"
+  }
 }

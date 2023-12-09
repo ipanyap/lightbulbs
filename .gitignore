@@ -1,0 +1,15 @@
+# General
+*.log
+
+# Node.js
+node_modules/
+
+# TypeScript
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# OS-specific
+.DS_STORE
+.DS_Store
