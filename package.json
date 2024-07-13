@@ -11,9 +11,11 @@
   "license": "LGPL-3.0-or-later",
   "workspaces": [
     "api",
-    "web"
+    "web",
+    "common"
   ],
   "dependencies": {
+    "ajv": "^8.17.1",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
