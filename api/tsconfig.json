@@ -4,5 +4,6 @@
     "target": "es2022",
     "rootDir": "./src",
     "outDir": "./dist"
-  }
+  },
+  "include": ["src/**/*", ""]
 }

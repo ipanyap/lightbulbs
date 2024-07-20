@@ -1,21 +1,9 @@
 import AJV, { JSONSchemaType } from 'ajv';
 import path from 'path';
 import { loadConfigFromJSONFile } from '@lightbulbs/common';
+import { IEnvironmentConfig } from './types';
 
 const API_SERVER_ENV = 'api::env';
-
-/**
- * The environment config type.
- */
-export interface IEnvironmentConfig {
-  db: {
-    host: string;
-    port: string;
-    database: string;
-    user: string;
-    password: string;
-  };
-}
 
 /**
  * JSON Schema representation of the environment config type.
