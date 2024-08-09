@@ -1,13 +1,19 @@
 import express, { Express, Request, Response } from 'express';
+import { getDatabaseClient } from './common/db';
 
 const PORT = 3000;
 
-const app: Express = express();
+(async () => {
+  // Initialize database connection.
+  await getDatabaseClient().connect();
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World! I am API server');
-});
+  const app: Express = express();
 
-app.listen(PORT, () => {
-  console.log('Server is running at port', PORT);
-});
+  app.get('/', (_req: Request, res: Response) => {
+    res.send('Hello World! I am API server');
+  });
+
+  app.listen(PORT, () => {
+    console.log('Server is running at port', PORT);
+  });
+})();
