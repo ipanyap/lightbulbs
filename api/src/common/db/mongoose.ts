@@ -56,7 +56,7 @@ export class MongoDBClient implements IDatabaseClient {
 
     try {
       await mongoose.connect(`mongodb://${host}:${port}/${database}`, {
-        // Prevent automatically building index (OK for development, not OK for prod)
+        // Prevent automatically building index (manually decide which index to create)
         autoIndex: false,
         // Connect using IPv4
         family: 4,
