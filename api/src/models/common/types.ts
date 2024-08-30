@@ -1,4 +1,22 @@
 /**
+ * The status of the entity's model.
+ */
+export enum ModelStatus {
+  /**
+   * 'EMPTY' means the model contains no data at all.
+   */
+  EMPTY = 'EMPTY',
+  /**
+   * 'PRISTINE' means the data in the model has not been edited by user since last time it's being synced with the database.
+   */
+  PRISTINE = 'PRISTINE',
+  /**
+   * 'DIRTY' means the data in the model has been edited by user and not yet saved to the database.
+   */
+  DIRTY = 'DIRTY',
+}
+
+/**
  * The common data for all entities stored in database.
  */
 export interface IEntityData {

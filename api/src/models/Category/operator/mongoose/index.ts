@@ -122,6 +122,7 @@ function extractCategoryData(doc: HydratedDocument<ICategoryData>): Partial<ICat
 
   const data: Partial<ICategoryData> = {};
 
+  // Convert mongoose model's default `_id` into the model data's `id`
   data.id = raw_data._id.toString();
 
   if (raw_data.name) {
