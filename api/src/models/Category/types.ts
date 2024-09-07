@@ -1,7 +1,7 @@
 import { IEntityData, IContextStatistics } from '../common/types';
 
 /**
- * The primary `Category` data
+ * The primary `Category` data.
  */
 export interface ICategory {
   name: string;
@@ -9,7 +9,7 @@ export interface ICategory {
 }
 
 /**
- * The complete `Category` data as stored in database
+ * The complete `Category` data as stored in database.
  */
 export type ICategoryData = IEntityData &
   ICategory & {

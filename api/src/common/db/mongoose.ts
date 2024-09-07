@@ -44,10 +44,11 @@ export class MongoDBClient implements IDatabaseClient {
   }
 
   /**
-   * Initiate database connection.
+   * Initiate MongoDB database connection.
+   * @todo the case of connecting using credentials has not been covered.
    */
   public async connect(): Promise<void> {
-    // If already connected, return immediately
+    // If already connected, return immediately.
     if (this.is_connected) {
       return Promise.resolve();
     }
@@ -56,9 +57,9 @@ export class MongoDBClient implements IDatabaseClient {
 
     try {
       await mongoose.connect(`mongodb://${host}:${port}/${database}`, {
-        // Prevent automatically building index (manually decide which index to create)
+        // Prevent automatically building index (manually decide which index to create).
         autoIndex: false,
-        // Connect using IPv4
+        // Connect using IPv4.
         family: 4,
       });
     } catch (error) {
@@ -67,7 +68,7 @@ export class MongoDBClient implements IDatabaseClient {
   }
 
   /**
-   * Close database connection.
+   * Close MongoDB database connection.
    */
   public async disconnect(): Promise<void> {
     if (this.is_connected) {
@@ -76,8 +77,8 @@ export class MongoDBClient implements IDatabaseClient {
   }
 
   /**
-   * Retrieve the connection status.
-   * @returns Whether client is connected to database.
+   * Retrieve the MongoDB connection status.
+   * @returns Whether client is connected to MongoDB database.
    */
   public isConnected(): boolean {
     return this.is_connected;

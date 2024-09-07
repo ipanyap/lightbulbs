@@ -42,7 +42,6 @@ export class MongoDBCategoryOperator implements ICategoryOperator {
 
   /**
    * Update `Category` document and save it into MongoDB.
-   * @todo what if there is error in saving?
    */
   public async update(input: { data: Partial<ICategoryData> }): Promise<void> {
     const { data } = input;
@@ -54,7 +53,7 @@ export class MongoDBCategoryOperator implements ICategoryOperator {
 
   /**
    * Delete `Category` data from MongoDB. Currently not implemented.
-   * @todo add implementation, whether using hard or soft deletion
+   * @todo add implementation, whether using hard or soft deletion.
    */
   public async delete(): Promise<void> {}
 
@@ -103,7 +102,7 @@ export class MongoDBCategoryOperator implements ICategoryOperator {
     // Create a mongoose projection (fields to retrieve) string.
     const projection = fields ? fields.join(' ') : null;
 
-    // Execute MongoDB query
+    // Execute MongoDB query.
     const docs = await CategoryModel.find(filter, projection);
 
     // Extract from query response and return the result.
@@ -114,7 +113,7 @@ export class MongoDBCategoryOperator implements ICategoryOperator {
 /**
  * Function to extract only attributes related to `Category` from a mongoose document object.
  * @param doc The `Category` document object created with mongoose.
- * @return The `Category` data (may be full or partial depending on the executed query)
+ * @return The `Category` data (may be full or partial depending on the executed query).
  */
 function extractCategoryData(doc: HydratedDocument<ICategoryData>): ICategoryData;
 function extractCategoryData(doc: HydratedDocument<ICategoryData>): Partial<ICategoryData> {
@@ -122,7 +121,7 @@ function extractCategoryData(doc: HydratedDocument<ICategoryData>): Partial<ICat
 
   const data: Partial<ICategoryData> = {};
 
-  // Convert mongoose model's default `_id` into the model data's `id`
+  // Convert mongoose model's default `_id` into the model data's `id`.
   data.id = raw_data._id.toString();
 
   if (raw_data.name) {
@@ -141,8 +140,8 @@ function extractCategoryData(doc: HydratedDocument<ICategoryData>): Partial<ICat
 /**
  * Function to load `Category` data by its ID.
  * @param id The identifier of the `Category` data.
- * @return The document object with the latest `Category` data in MongoDB
- * @throws Document not found exception
+ * @return The document object with the latest `Category` data in MongoDB.
+ * @throws Document not found exception.
  */
 async function loadCategoryDoc(id: string): Promise<HydratedDocument<ICategoryData>> {
   const doc = await CategoryModel.findById(id);

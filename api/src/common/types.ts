@@ -17,10 +17,20 @@ export interface IEnvironmentConfig {
 }
 
 /**
- * The database client type.
+ * The common database client type.
  */
 export interface IDatabaseClient {
+  /**
+   * Initiate database connection.
+   */
   connect: () => Promise<void>;
+  /**
+   * Close database connection.
+   */
   disconnect: () => Promise<void>;
+  /**
+   * Retrieve the connection status.
+   * @returns Whether client is connected to database.
+   */
   isConnected: () => boolean;
 }

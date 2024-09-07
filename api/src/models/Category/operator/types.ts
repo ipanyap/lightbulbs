@@ -36,26 +36,26 @@ export interface ICategoryOperator {
  */
 export interface ICategoryOperatorClass {
   /**
-   * Insert a new `Category` record and create a `CategoryOperator` object to access it.
-   * @param input.data The new `Category`'s attributes
-   * @returns The `CategoryOperator` object
    * @static
+   * Insert a new `Category` record and create a `CategoryOperator` object to access it.
+   * @param input.data The new `Category`'s attributes.
+   * @returns The `CategoryOperator` object.
    */
   create: (input: { data: ICategoryData }) => Promise<ICategoryOperator>;
   /**
-   * Retrieve existing `Category` record and create a `CategoryOperator` object to access it.
-   * @param input.id The record identifier of the `Category` data
-   * @returns The `CategoryOperator` object
    * @static
+   * Retrieve existing `Category` record and create a `CategoryOperator` object to access it.
+   * @param input.id The record identifier of the `Category` data.
+   * @returns The `CategoryOperator` object.
    */
   retrieveOne: (input: { id: string }) => Promise<ICategoryOperator>;
   /**
-   * Find all `Category` records matching specified filter and return their requested fields.
-   * @param input.filter.name Filter to search all data whose name contains the specified string
-   * @param input.filter.description Filter to search all data whose description contains the specified string
-   * @param input.fields Array of field names to include in the results. By default all fields are included.
-   * @returns Array of objects containing the `Category` data
    * @static
+   * Find all `Category` records matching specified filter and return their requested fields.
+   * @param input.filter.name Filter to search all data whose name contains the specified string.
+   * @param input.filter.description Filter to search all data whose description contains the specified string.
+   * @param input.fields Array of field names to include in the results. By default all fields are included.
+   * @returns Array of objects containing the `Category` data.
    */
   findAll: (input?: {
     filter?: ICategoryFilter;

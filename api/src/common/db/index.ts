@@ -9,7 +9,7 @@ let database: IDatabaseClient | null = null;
 
 /**
  * Initializes database client if needed, and returns the client.
- * @returns The database client
+ * @returns The database client.
  */
 export function getDatabaseClient(): IDatabaseClient {
   if (database === null) {

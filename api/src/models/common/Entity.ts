@@ -55,7 +55,7 @@ export abstract class Entity<DataType extends IEntityData> {
   protected executeEdit(edit: (data: DataType | null, status: ModelStatus) => DataType): void {
     this.data = edit(this.data, this.status);
 
-    // Since there is unsaved change, change the status to DIRTY
+    // Since there is unsaved change, change the status to DIRTY.
     this.status = ModelStatus.DIRTY;
   }
 
@@ -65,14 +65,14 @@ export abstract class Entity<DataType extends IEntityData> {
    * @returns Promise that resolves to void.
    */
   protected async executeSave(save: (data: DataType) => Promise<void>): Promise<void> {
-    // Cannot be performed on an EMPTY model
+    // Cannot be performed on an EMPTY model.
     if (this.data === null || this.status === ModelStatus.EMPTY) {
       throw Error('Cannot perform save with empty data!');
     }
 
     await save(this.data);
 
-    // Since the data is now in sync with the database, change the status to PRISTINE
+    // Since the data is now in sync with the database, change the status to PRISTINE.
     this.status = ModelStatus.PRISTINE;
   }
 
@@ -84,7 +84,7 @@ export abstract class Entity<DataType extends IEntityData> {
   protected async executeLoad(load: () => Promise<DataType>): Promise<void> {
     this.data = await load();
 
-    // Since the data is now in sync with the database, change the status to PRISTINE
+    // Since the data is now in sync with the database, change the status to PRISTINE.
     this.status = ModelStatus.PRISTINE;
   }
 
