@@ -1,4 +1,4 @@
-import { IEntityData, IContextStatistics } from '../common/types';
+import { IContextStatistics, IEntityData } from '../common/types';
 
 export enum ReferenceType {
   PRINT = 'Print',
@@ -38,10 +38,11 @@ export interface IReference {
 /**
  * The complete `Reference` data as stored in database.
  */
-export type IReferenceData = IEntityData &
+export type IReferenceData = IEntityData<
   IReference & {
     statistics: IContextStatistics;
-  };
+  }
+>;
 
 /**
  * The filter type for `Reference` search.
