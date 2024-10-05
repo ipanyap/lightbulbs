@@ -1,4 +1,4 @@
-import { IContextStatistics, IEntityData } from '../common/types';
+import { IContextStatistics, IEntityData } from '../Entity/types';
 
 export enum ReferenceType {
   PRINT = 'Print',

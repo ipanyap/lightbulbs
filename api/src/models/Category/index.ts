@@ -1,5 +1,5 @@
-import { Entity } from '../common/Entity';
-import { ModelStatus } from '../common/types';
+import { Entity } from '../Entity';
+import { ModelStatus } from '../Entity/types';
 import { CategoryOperator } from './operator';
 import { ICategoryOperator } from './operator/types';
 import { ICategoryData, ICategory } from './types';

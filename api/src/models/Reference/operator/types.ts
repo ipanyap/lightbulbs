@@ -1,4 +1,4 @@
-import { IDatabaseOperator, IDatabaseOperatorClass } from '../../common/operator/types';
+import { IDatabaseOperator, IDatabaseOperatorClass } from '../../Entity/operator/types';
 import { IReference, IReferenceData, IReferenceFilter } from '../types';
 
 /**

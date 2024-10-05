@@ -1,5 +1,5 @@
-import { Entity } from '../common/Entity';
-import { ModelStatus } from '../common/types';
+import { Entity } from '../Entity';
+import { ModelStatus } from '../Entity/types';
 import { ReferenceOperator } from './operator';
 import { IReferenceOperator } from './operator/types';
 import { IReferenceData, IReference } from './types';

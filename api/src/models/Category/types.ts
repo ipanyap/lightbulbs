@@ -1,4 +1,4 @@
-import { IContextStatistics, IEntityData } from '../common/types';
+import { IContextStatistics, IEntityData } from '../Entity/types';
 
 /**
  * The primary `Category` data.
