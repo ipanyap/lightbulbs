@@ -1,9 +1,9 @@
-import { IEntityData, ModelStatus } from './types';
+import { IBaseEntityData, ModelStatus } from './types';
 
 /**
  * Base class that models an entity and its related functionalities.
  */
-export abstract class Entity<DataType extends IEntityData> {
+export abstract class Entity<DataType extends IBaseEntityData> {
   private data: DataType | null;
   private status: ModelStatus;
 
