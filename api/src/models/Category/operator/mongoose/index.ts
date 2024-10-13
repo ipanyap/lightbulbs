@@ -1,4 +1,5 @@
 import { FilterQuery, HydratedDocument } from 'mongoose';
+import { MongoDBOperator } from '../../../Entity/operator/mongoose';
 import { ICategory, ICategoryData, ICategoryFilter } from '../../types';
 import { ICategoryOperator } from '../types';
 import { CategoryModel } from './schema';
@@ -6,56 +7,18 @@ import { CategoryModel } from './schema';
 /**
  * Class that implements `CategoryOperator` for MongoDB database using mongoose library.
  */
-export class MongoDBCategoryOperator implements ICategoryOperator {
-  private doc: HydratedDocument<ICategoryData>;
-
+export class MongoDBCategoryOperator extends MongoDBOperator<ICategoryData> {
   /**
    * Construct an operator that manages a `Category` record in MongoDB.
    * @param doc The document object created with mongoose.
    */
   private constructor(doc: HydratedDocument<ICategoryData>) {
-    this.doc = doc;
+    super({
+      doc,
+      extractData: extractCategoryData,
+      loadDoc: loadCategoryDoc,
+    });
   }
-
-  /**
-   * Retrieve `Category` data from MongoDB client.
-   */
-  public getData(): ICategoryData {
-    return extractCategoryData(this.doc);
-  }
-
-  /**
-   * Retrieve document ID of `Category` data.
-   */
-  public getID(): string {
-    return this.doc._id.toString();
-  }
-
-  /**
-   * Reload `Category` data from MongoDB.
-   */
-  public async refresh(): Promise<void> {
-    const id = this.getID();
-
-    this.doc = await loadCategoryDoc(id);
-  }
-
-  /**
-   * Update `Category` document and save it into MongoDB.
-   */
-  public async update(input: { data: Partial<ICategoryData> }): Promise<void> {
-    const { data } = input;
-
-    Object.assign(this.doc, data);
-
-    await this.doc.save();
-  }
-
-  /**
-   * Delete `Category` data from MongoDB. Currently not implemented.
-   * @todo add implementation, whether using hard or soft deletion.
-   */
-  public async delete(): Promise<void> {}
 
   /**
    * Save a new `Category` document into MongoDB and return an operator to access it.

@@ -1,4 +1,5 @@
 import { FilterQuery, HydratedDocument } from 'mongoose';
+import { MongoDBOperator } from '../../../Entity/operator/mongoose';
 import { IReference, IReferenceData, IReferenceFilter } from '../../types';
 import { IReferenceOperator } from '../types';
 import { ReferenceModel } from './schema';
@@ -6,56 +7,18 @@ import { ReferenceModel } from './schema';
 /**
  * Class that implements `ReferenceOperator` for MongoDB database using mongoose library.
  */
-export class MongoDBReferenceOperator implements IReferenceOperator {
-  private doc: HydratedDocument<IReferenceData>;
-
+export class MongoDBReferenceOperator extends MongoDBOperator<IReferenceData> {
   /**
    * Construct an operator that manages a `Reference` record in MongoDB.
    * @param doc The document object created with mongoose.
    */
   private constructor(doc: HydratedDocument<IReferenceData>) {
-    this.doc = doc;
+    super({
+      doc,
+      extractData: extractReferenceData,
+      loadDoc: loadReferenceDoc,
+    });
   }
-
-  /**
-   * Retrieve `Reference` data from MongoDB client.
-   */
-  public getData(): IReferenceData {
-    return extractReferenceData(this.doc);
-  }
-
-  /**
-   * Retrieve document ID of `Reference` data.
-   */
-  public getID(): string {
-    return this.doc._id.toString();
-  }
-
-  /**
-   * Reload `Reference` data from MongoDB.
-   */
-  public async refresh(): Promise<void> {
-    const id = this.getID();
-
-    this.doc = await loadReferenceDoc(id);
-  }
-
-  /**
-   * Update `Reference` document and save it into MongoDB.
-   */
-  public async update(input: { data: Partial<IReferenceData> }): Promise<void> {
-    const { data } = input;
-
-    Object.assign(this.doc, data);
-
-    await this.doc.save();
-  }
-
-  /**
-   * Delete `Reference` data from MongoDB. Currently not implemented.
-   * @todo add implementation, whether using hard or soft deletion.
-   */
-  public async delete(): Promise<void> {}
 
   /**
    * Save a new `Reference` document into MongoDB and return an operator to access it.
