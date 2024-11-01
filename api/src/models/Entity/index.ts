@@ -1,3 +1,4 @@
+import { IDatabaseOperator } from './operator/types';
 import { IBaseEntityData, ModelStatus } from './types';
 
 /**
@@ -6,6 +7,7 @@ import { IBaseEntityData, ModelStatus } from './types';
 export abstract class Entity<DataType extends IBaseEntityData> {
   private data: DataType | null;
   private status: ModelStatus;
+  private operator: IDatabaseOperator<DataType> | null;
 
   /**
    * Create an entity model instance.
@@ -19,6 +21,7 @@ export abstract class Entity<DataType extends IBaseEntityData> {
       this.data = null;
       this.status = ModelStatus.EMPTY;
     }
+    this.operator = null;
   }
 
   /**
@@ -26,6 +29,7 @@ export abstract class Entity<DataType extends IBaseEntityData> {
    * @returns Reference to `this` model instance.
    */
   public clear(): Entity<DataType> {
+    this.operator = null;
     this.data = null;
     this.status = ModelStatus.EMPTY;
 
@@ -41,6 +45,14 @@ export abstract class Entity<DataType extends IBaseEntityData> {
   }
 
   /**
+   * Retrieve the identifier of the data contained in the model.
+   * @returns The ID, or null if the model is in EMPTY state.
+   */
+  public getID(): string | null {
+    return this.operator ? this.operator.getID() : null;
+  }
+
+  /**
    * Retrieve the current status of the model.
    * @returns The status.
    */
@@ -52,7 +64,7 @@ export abstract class Entity<DataType extends IBaseEntityData> {
    * Perform edit operation and handle the internal state validation or update.
    * @param edit The editing function, provided by the child class.
    */
-  protected executeEdit(edit: (data: DataType | null, status: ModelStatus) => DataType): void {
+  protected performEdit(edit: (data: DataType | null, status: ModelStatus) => DataType): void {
     this.data = edit(this.data, this.status);
 
     // Since there is unsaved change, change the status to DIRTY.
@@ -60,53 +72,65 @@ export abstract class Entity<DataType extends IBaseEntityData> {
   }
 
   /**
-   * Perform save operation and handle the internal state validation or update.
-   * @param save The save function, provided by the child class.
+   * Save the model's data into the database.
    * @returns Promise that resolves to void.
    */
-  protected async executeSave(save: (data: DataType) => Promise<void>): Promise<void> {
+  public async save(): Promise<void> {
     // Cannot be performed on an EMPTY model.
     if (this.data === null || this.status === ModelStatus.EMPTY) {
       throw Error('Cannot perform save with empty data!');
     }
 
-    await save(this.data);
+    if (this.operator === null) {
+      // Data has never been in the database: insert into database and create an operator.
+      this.operator = await this.createOperator(this.data);
+    } else {
+      // Data has either been inserted or been loaded: update to database.
+      await this.operator.update({ data: this.data });
+    }
 
     // Since the data is now in sync with the database, change the status to PRISTINE.
     this.status = ModelStatus.PRISTINE;
   }
 
   /**
-   * Perform load operation and handle the internal state validation or update.
-   * @param load The load function, provided by the child class.
-   * @returns Promise that resolves to void.
-   */
-  protected async executeLoad(load: () => Promise<DataType>): Promise<void> {
-    this.data = await load();
-
-    // Since the data is now in sync with the database, change the status to PRISTINE.
-    this.status = ModelStatus.PRISTINE;
-  }
-
-  /**
-   * @abstract
-   * Save the model's data into the database. Implementation is handled by the child class.
-   * @returns Promise that resolves to void.
-   */
-  public abstract save(): Promise<void>;
-
-  /**
-   * @abstract
-   * Retrieve the model's data from the database. Implementation is handled by the child class.
+   * Retrieve the model's data from the database.
    * @param id The identifier of the data.
    * @returns Promise that resolves to void.
    */
-  public abstract load(id: string): Promise<void>;
+  public async load(id: string): Promise<void> {
+    if (this.operator && this.operator.getID() === id) {
+      // Trying to load data with the same ID as previous: do refresh instead.
+      await this.operator.refresh();
+    } else {
+      // Retrieve the new data, create a new operator and replace the old operator.
+      this.operator = await this.createOperator(id);
+    }
+
+    this.data = this.operator.getData();
+
+    // Since the data is now in sync with the database, change the status to PRISTINE.
+    this.status = ModelStatus.PRISTINE;
+  }
+
+  /**
+   * Reload the model's data from the database.
+   * @returns Promise that resolves to void.
+   */
+  public async reload(): Promise<void> {
+    if (!this.operator) {
+      throw Error('Cannot reload: data has never been loaded previously!');
+    }
+
+    await this.load(this.operator.getID());
+  }
 
   /**
    * @abstract
-   * Reload the model's data from the database. Implementation is handled by the child class.
-   * @returns Promise that resolves to void.
+   * Provides a new database operator instance.
+   * As the operator type is specific for each model, implementation is handled by the child class.
+   * @param input Either a record ID if loading existing DB record, or full entity data if inserting new record.
+   * @returns Promise that resolves to the new operator instance.
    */
-  public abstract reload(): Promise<void>;
+  protected abstract createOperator(input: string | DataType): Promise<IDatabaseOperator<DataType>>;
 }
