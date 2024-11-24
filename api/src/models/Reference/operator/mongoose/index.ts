@@ -16,6 +16,7 @@ export class MongoDBReferenceOperator extends MongoDBOperator<IReferenceData> {
     super({
       doc,
       extractData: extractReferenceData,
+      injectData: injectReferenceData,
       loadDoc: loadReferenceDoc,
     });
   }
@@ -113,6 +114,15 @@ function extractReferenceData(doc: HydratedDocument<IReferenceData>): Partial<IR
   }
 
   return data;
+}
+
+/**
+ * Function to inject some attributes of `Reference` data into related mongoose document object.
+ * @param data The `Reference` data to be injected.
+ * @param doc The `Reference` document object created with mongoose.
+ */
+function injectReferenceData(data: Partial<IReferenceData>, doc: HydratedDocument<IReferenceData>): void {
+  Object.assign(doc, data);
 }
 
 /**

@@ -16,6 +16,7 @@ export class MongoDBCategoryOperator extends MongoDBOperator<ICategoryData> {
     super({
       doc,
       extractData: extractCategoryData,
+      injectData: injectCategoryData,
       loadDoc: loadCategoryDoc,
     });
   }
@@ -98,6 +99,15 @@ function extractCategoryData(doc: HydratedDocument<ICategoryData>): Partial<ICat
   }
 
   return data;
+}
+
+/**
+ * Function to inject some attributes of `Category` data into related mongoose document object.
+ * @param data The `Category` data to be injected.
+ * @param doc The `Category` document object created with mongoose.
+ */
+function injectCategoryData(data: Partial<ICategoryData>, doc: HydratedDocument<ICategoryData>): void {
+  Object.assign(doc, data);
 }
 
 /**

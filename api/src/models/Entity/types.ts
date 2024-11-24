@@ -34,6 +34,13 @@ export interface IContextStatistics {
 }
 
 /**
+ * The statistical metadata for entities which may have parent-child relationship between records.
+ */
+export interface IHierarchyStatistics {
+  total_children: number;
+}
+
+/**
  * The type generator for entity data stored in database.
  */
 export type IEntityData<DataType> = IBaseEntityData & DataType;

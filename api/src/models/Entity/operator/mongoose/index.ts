@@ -1,15 +1,20 @@
 import { HydratedDocument } from 'mongoose';
 import { IBaseEntityData } from '../../types';
 import { IDatabaseOperator } from '../types';
-import { IExtractDataFunction, ILoadDocFunction } from './types';
+import { IExtractDataFunction, IInjectDataFunction, ILoadDocFunction } from './types';
 
 /**
  * Class that implements `IDatabaseOperator` for MongoDB using mongoose library.
  */
-export abstract class MongoDBOperator<EntityType extends IBaseEntityData> implements IDatabaseOperator<EntityType> {
-  private doc: HydratedDocument<EntityType>;
-  private extractData: IExtractDataFunction<EntityType>;
-  private loadDoc: ILoadDocFunction<EntityType>;
+export abstract class MongoDBOperator<
+  EntityType extends IBaseEntityData,
+  RawEntityType extends IBaseEntityData = EntityType,
+> implements IDatabaseOperator<EntityType>
+{
+  private doc: HydratedDocument<RawEntityType>;
+  private extractData: IExtractDataFunction<EntityType, RawEntityType>;
+  private injectData: IInjectDataFunction<EntityType, RawEntityType>;
+  private loadDoc: ILoadDocFunction<RawEntityType>;
 
   /**
    * Construct an operator that manages an entity record in MongoDB.
@@ -20,14 +25,17 @@ export abstract class MongoDBOperator<EntityType extends IBaseEntityData> implem
   protected constructor({
     doc,
     extractData,
+    injectData,
     loadDoc,
   }: {
-    doc: HydratedDocument<EntityType>;
-    extractData: IExtractDataFunction<EntityType>;
-    loadDoc: ILoadDocFunction<EntityType>;
+    doc: HydratedDocument<RawEntityType>;
+    extractData: IExtractDataFunction<EntityType, RawEntityType>;
+    injectData: IInjectDataFunction<EntityType, RawEntityType>;
+    loadDoc: ILoadDocFunction<RawEntityType>;
   }) {
     this.doc = doc;
     this.extractData = extractData;
+    this.injectData = injectData;
     this.loadDoc = loadDoc;
   }
 
@@ -60,7 +68,7 @@ export abstract class MongoDBOperator<EntityType extends IBaseEntityData> implem
   public async update(input: { data: Partial<EntityType> }): Promise<void> {
     const { data } = input;
 
-    Object.assign(this.doc, data);
+    this.injectData(data, this.doc);
 
     await this.doc.save();
   }
