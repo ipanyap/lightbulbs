@@ -84,6 +84,9 @@ export abstract class Entity<DataType extends IBaseEntityData> {
     if (this.operator === null) {
       // Data has never been in the database: insert into database and create an operator.
       this.operator = await this.createOperator(this.data);
+
+      // Update record ID
+      this.data.id = this.operator.getID();
     } else {
       // Data has either been inserted or been loaded: update to database.
       await this.operator.update({ data: this.data });

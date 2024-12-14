@@ -94,22 +94,22 @@ function extractReferenceData(doc: HydratedDocument<IReferenceData>): Partial<IR
   // Convert mongoose model's default `_id` into the model data's `id`.
   data.id = raw_data._id.toString();
 
-  if (raw_data.name) {
+  if (raw_data.name !== undefined) {
     data.name = raw_data.name;
   }
-  if (raw_data.type) {
+  if (raw_data.type !== undefined) {
     data.type = raw_data.type;
   }
-  if (raw_data.locator) {
+  if (raw_data.locator !== undefined) {
     data.locator = raw_data.locator;
   }
-  if (raw_data.image_url) {
+  if (raw_data.image_url !== undefined) {
     data.image_url = raw_data.image_url;
   }
-  if (raw_data.description) {
+  if (raw_data.description !== undefined) {
     data.description = raw_data.description;
   }
-  if (raw_data.statistics) {
+  if (raw_data.statistics !== undefined) {
     data.statistics = raw_data.statistics;
   }
 

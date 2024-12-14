@@ -63,9 +63,9 @@ export type IReferenceType = (typeof ReferenceTypes)[number];
 export interface IReference {
   name: string;
   type: ReferenceType;
-  locator?: string;
-  image_url?: string;
-  description?: string;
+  locator: string | null;
+  image_url: string | null;
+  description: string | null;
 }
 
 /**

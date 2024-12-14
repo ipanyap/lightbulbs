@@ -5,7 +5,7 @@ import { IContextStatistics, IEntityData } from '../Entity/types';
  */
 export interface ICategory {
   name: string;
-  description?: string;
+  description: string | null;
 }
 
 /**

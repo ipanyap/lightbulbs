@@ -41,7 +41,15 @@ export class Reference extends Entity<IReferenceData> {
         // Assert that the input is sufficient to initialize the model's data.
         assertReference(input);
 
+        // Provide default attributes
+        const default_attributes = {
+          locator: null,
+          image_url: null,
+          description: null,
+        };
+
         return {
+          ...default_attributes,
           ...input,
           statistics: {
             total_bulbs: 0,

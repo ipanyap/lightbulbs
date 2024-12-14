@@ -41,7 +41,13 @@ export class Category extends Entity<ICategoryData> {
         // Assert that the input is sufficient to initialize the model's data.
         assertCategory(input);
 
+        // Provide default attributes
+        const default_attributes = {
+          description: null,
+        };
+
         return {
+          ...default_attributes,
           ...input,
           statistics: {
             total_bulbs: 0,

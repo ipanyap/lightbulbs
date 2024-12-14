@@ -88,13 +88,13 @@ function extractCategoryData(doc: HydratedDocument<ICategoryData>): Partial<ICat
   // Convert mongoose model's default `_id` into the model data's `id`.
   data.id = raw_data._id.toString();
 
-  if (raw_data.name) {
+  if (raw_data.name !== undefined) {
     data.name = raw_data.name;
   }
-  if (raw_data.description) {
+  if (raw_data.description !== undefined) {
     data.description = raw_data.description;
   }
-  if (raw_data.statistics) {
+  if (raw_data.statistics !== undefined) {
     data.statistics = raw_data.statistics;
   }
 
