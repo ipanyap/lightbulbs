@@ -234,6 +234,6 @@ export class Tag extends Entity<ITagData> {
  */
 function assertTag(input: Partial<ITag>): asserts input is ITag {
   if (!input.label) {
-    throw Error('Provided input is not a complete tag type!');
+    throw Error('The provided input is not a complete tag type!');
   }
 }

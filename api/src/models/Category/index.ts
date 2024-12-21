@@ -143,6 +143,6 @@ export class Category extends Entity<ICategoryData> {
  */
 function assertCategory(input: Partial<ICategory>): asserts input is ICategory {
   if (!input.name) {
-    throw Error('Provided input is not a complete category type!');
+    throw Error('The provided input is not a complete category type!');
   }
 }

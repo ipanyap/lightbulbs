@@ -145,6 +145,6 @@ export class Reference extends Entity<IReferenceData> {
  */
 function assertReference(input: Partial<IReference>): asserts input is IReference {
   if (!input.name || !input.type) {
-    throw Error('Provided input is not a complete reference type!');
+    throw Error('The provided input is not a complete reference type!');
   }
 }
