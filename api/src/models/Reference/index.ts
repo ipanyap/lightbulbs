@@ -1,18 +1,18 @@
 import { Entity } from '../Entity';
 import { ModelStatus } from '../Entity/types';
-import { CategoryOperator } from './operator';
-import { ICategoryOperator } from './operator/types';
-import { ICategoryData, ICategory } from './types';
+import { ReferenceOperator } from './operator';
+import { IReferenceOperator } from './operator/types';
+import { IReferenceData, IReference } from './types';
 
 /**
- * Class that models a category and its related functionalities.
+ * Class that models a reference and its related functionalities.
  */
-export class Category extends Entity<ICategoryData> {
+export class Reference extends Entity<IReferenceData> {
   /**
-   * Create a category model instance.
+   * Create a reference model instance.
    * @param input The data to initialize the model. If not provided, the data will be null.
    */
-  constructor(input?: ICategory) {
+  constructor(input?: IReference) {
     if (input) {
       super({
         ...input,
@@ -26,23 +26,25 @@ export class Category extends Entity<ICategoryData> {
   }
 
   /**
-   * Edit the data in the `Category` model. The change is not saved until `.save()` is called.
-   * @param input The category data to be changed.
+   * Edit the data in the `Reference` model. The change is not saved until `.save()` is called.
+   * @param input The reference data to be changed.
    * @returns Reference to `this` model instance.
    */
-  public setData(input: Partial<ICategory>): Category {
+  public setData(input: Partial<IReference>): Reference {
     // The function to set the data.
-    const edit_function = (data: ICategoryData | null): ICategoryData => {
+    const edit_function = (data: IReferenceData | null): IReferenceData => {
       if (!data) {
         /**
          * Model instance has no data: initialize with the given input.
          */
 
         // Assert that the input is sufficient to initialize the model's data.
-        assertCategory(input);
+        assertReference(input);
 
         // Provide default attributes
         const default_attributes = {
+          locator: null,
+          image_url: null,
           description: null,
         };
 
@@ -75,9 +77,9 @@ export class Category extends Entity<ICategoryData> {
    * Increment the total bulbs statistic. The change is not saved until `.save()` is called.
    * @returns Reference to `this` model instance.
    */
-  public increaseTotalBulbs(): Category {
+  public increaseTotalBulbs(): Reference {
     // The function to increment total bulbs.
-    const increment_function = (data: ICategoryData | null, status: ModelStatus): ICategoryData => {
+    const increment_function = (data: IReferenceData | null, status: ModelStatus): IReferenceData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
         throw Error('Cannot increase total bulbs of empty data!');
@@ -98,9 +100,9 @@ export class Category extends Entity<ICategoryData> {
    * Decrement the total bulbs statistic. The change is not saved until `.save()` is called.
    * @returns Reference to `this` model instance.
    */
-  public decreaseTotalBulbs(): Category {
+  public decreaseTotalBulbs(): Reference {
     // The function to decrement total bulbs.
-    const decrement_function = (data: ICategoryData | null, status: ModelStatus): ICategoryData => {
+    const decrement_function = (data: IReferenceData | null, status: ModelStatus): IReferenceData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
         throw Error('Cannot decrease total bulbs of empty data!');
@@ -123,26 +125,26 @@ export class Category extends Entity<ICategoryData> {
   }
 
   /**
-   * Provides a new database operator instance for category model.
-   * @param input Either a record ID if loading existing category data, or primary category data if inserting new record.
-   * @returns Promise that resolves to the new category operator instance.
+   * Provides a new database operator instance for reference model.
+   * @param input Either a record ID if loading existing reference data, or primary reference data if inserting new record.
+   * @returns Promise that resolves to the new reference operator instance.
    */
-  protected async createOperator(input: string | ICategoryData): Promise<ICategoryOperator> {
+  protected async createOperator(input: string | IReferenceData): Promise<IReferenceOperator> {
     if (typeof input === 'string') {
-      return await CategoryOperator.retrieveOne({ id: input });
+      return await ReferenceOperator.retrieveOne({ id: input });
     } else {
-      return await CategoryOperator.create({ data: input });
+      return await ReferenceOperator.create({ data: input });
     }
   }
 }
 
 /**
- * Function to assert whether an object contains valid category data.
+ * Function to assert whether an object contains valid reference data.
  * @param input The object to assert.
  * @throws Type assertion exception.
  */
-function assertCategory(input: Partial<ICategory>): asserts input is ICategory {
-  if (!input.name) {
-    throw Error('The provided input is not a complete category type!');
+function assertReference(input: Partial<IReference>): asserts input is IReference {
+  if (!input.name || !input.type) {
+    throw Error('The provided input is not a complete reference type!');
   }
 }

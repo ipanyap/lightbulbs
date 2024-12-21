@@ -1,20 +1,21 @@
-import { IEntityData, IContextStatistics } from '../common/types';
+import { IContextStatistics, IEntityData } from '../Entity/types';
 
 /**
  * The primary `Category` data.
  */
 export interface ICategory {
   name: string;
-  description?: string;
+  description: string | null;
 }
 
 /**
  * The complete `Category` data as stored in database.
  */
-export type ICategoryData = IEntityData &
+export type ICategoryData = IEntityData<
   ICategory & {
     statistics: IContextStatistics;
-  };
+  }
+>;
 
 /**
  * The filter type for `Category` search.

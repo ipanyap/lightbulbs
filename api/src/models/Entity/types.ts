@@ -19,7 +19,7 @@ export enum ModelStatus {
 /**
  * The common data for all entities stored in database.
  */
-export interface IEntityData {
+export interface IBaseEntityData {
   id?: string;
   created_at?: Date;
   updated_at?: Date;
@@ -32,3 +32,15 @@ export interface IEntityData {
 export interface IContextStatistics {
   total_bulbs: number;
 }
+
+/**
+ * The statistical metadata for entities which may have parent-child relationship between records.
+ */
+export interface IHierarchyStatistics {
+  total_children: number;
+}
+
+/**
+ * The type generator for entity data stored in database.
+ */
+export type IEntityData<DataType> = IBaseEntityData & DataType;
