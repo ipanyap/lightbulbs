@@ -31,7 +31,7 @@ export class Tag extends Entity<ITagData> {
    * @param input The tag data to be changed (excluding parent_id).
    * @returns Reference to `this` model instance.
    */
-  public setData(input: Partial<Omit<ITag, 'parent_id'>>): Tag {
+  public setData(input: Partial<Omit<ITag, 'parent'>>): Tag {
     // The function to set the data.
     const edit_function = (data: ITagData | null): ITagData => {
       if (!data) {
@@ -44,7 +44,7 @@ export class Tag extends Entity<ITagData> {
 
         // Provide default attributes
         const default_attributes = {
-          parent_id: null,
+          parent: null,
           description: null,
         };
 
@@ -97,9 +97,11 @@ export class Tag extends Entity<ITagData> {
           throw Error('Cannot link a tag with itself!');
         }
 
-        data.parent_id = parent_id;
+        data.parent = {
+          id: parent_id,
+        };
       } else {
-        data.parent_id = null;
+        data.parent = null;
       }
 
       return data;

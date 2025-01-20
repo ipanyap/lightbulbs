@@ -56,8 +56,8 @@ export class MongoDBTagOperator extends MongoDBOperator<ITagData, IRawTagData> {
       if (criteria.label) {
         filter.label = { $regex: criteria.label, $options: 'i' };
       }
-      if (criteria.parent_id) {
-        filter.parent_id = new Types.ObjectId(criteria.parent_id);
+      if (criteria.parent) {
+        filter.parent_id = new Types.ObjectId(criteria.parent.id);
       }
       if (criteria.description) {
         filter.description = { $regex: criteria.description, $options: 'i' };
@@ -94,7 +94,9 @@ function extractTagData(doc: HydratedDocument<IRawTagData>): Partial<ITagData> {
   }
   if (raw_data.parent_id !== undefined) {
     // Convert ObjectId to string
-    data.parent_id = raw_data.parent_id && raw_data.parent_id.toString();
+    data.parent = raw_data.parent_id && {
+      id: raw_data.parent_id.toString(),
+    };
   }
   if (raw_data.description !== undefined) {
     data.description = raw_data.description;
@@ -112,14 +114,14 @@ function extractTagData(doc: HydratedDocument<IRawTagData>): Partial<ITagData> {
  * @return The `Tag` raw data (may be partial).
  */
 function convertModelDataToRawData(data: Partial<ITagData>): Partial<IRawTagData> {
-  const { parent_id, ...others } = data;
+  const { parent, ...others } = data;
 
   return {
     ...others,
-    ...(parent_id === undefined
+    ...(parent === undefined
       ? {}
       : {
-          parent_id: parent_id === null ? null : new Types.ObjectId(parent_id),
+          parent_id: parent && new Types.ObjectId(parent.id),
         }),
   };
 }

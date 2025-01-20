@@ -5,7 +5,9 @@ import { IContextStatistics, IEntityData, IHierarchyStatistics } from '../Entity
  */
 export interface ITag {
   label: string;
-  parent_id: string | null;
+  parent: {
+    id: string;
+  } | null;
   description: string | null;
 }
 
@@ -22,4 +24,4 @@ export type ITagData = IEntityData<
  * The filter type for `Tag` search.
  * @todo this has limitations and cannot cover filtering operators beside string contains.
  */
-export type ITagFilter = Partial<Pick<ITagData, 'label' | 'parent_id' | 'description'>>;
+export type ITagFilter = Partial<Pick<ITagData, 'label' | 'parent' | 'description'>>;
