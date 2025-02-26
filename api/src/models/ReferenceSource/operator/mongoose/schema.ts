@@ -1,13 +1,13 @@
 import mongoose, { Schema } from 'mongoose';
-import { IReferenceData, ReferenceTypes } from '../../types';
+import { IReferenceSourceData, ReferenceSourceTypes } from '../../types';
 
 /**
- * Mongoose schema definition for `Reference` model.
+ * Mongoose schema definition for `ReferenceSource` model.
  */
-const referenceSchema = new Schema<IReferenceData>(
+const referenceSourceSchema = new Schema<IReferenceSourceData>(
   {
     name: { type: String, required: true, index: { unique: true } },
-    type: { type: String, required: true, enum: ReferenceTypes },
+    type: { type: String, required: true, enum: ReferenceSourceTypes },
     locator: { type: String },
     image_url: { type: String },
     description: { type: String },
@@ -32,6 +32,6 @@ const referenceSchema = new Schema<IReferenceData>(
 );
 
 /**
- * Mongoose implementation of `Reference` model.
+ * Mongoose implementation of `ReferenceSource` model.
  */
-export const ReferenceModel = mongoose.model<IReferenceData>('Reference', referenceSchema);
+export const ReferenceSourceModel = mongoose.model<IReferenceSourceData>('ReferenceSource', referenceSourceSchema);
