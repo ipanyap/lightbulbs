@@ -13,16 +13,17 @@ export class ReferenceSource extends Entity<IReferenceSourceData> {
    * @param input The data to initialize the model. If not provided, the data will be null.
    */
   constructor(input?: IReferenceSource) {
+    let reference_source_data: IReferenceSourceData | undefined;
     if (input) {
-      super({
+      reference_source_data = {
         ...input,
         statistics: {
           total_bulbs: 0,
         },
-      });
-    } else {
-      super();
+      };
     }
+
+    super('reference source', reference_source_data);
   }
 
   /**

@@ -5,6 +5,7 @@ import { IBaseEntityData, ModelStatus } from './types';
  * Base class that models an entity and its related functionalities.
  */
 export abstract class Entity<DataType extends IBaseEntityData> {
+  public readonly name: string;
   private data: DataType | null;
   private status: ModelStatus;
   private operator: IDatabaseOperator<DataType> | null;
@@ -13,7 +14,8 @@ export abstract class Entity<DataType extends IBaseEntityData> {
    * Create an entity model instance.
    * @param input The data to initialize the model. If not provided, the data will be null.
    */
-  constructor(input?: DataType) {
+  constructor(name: string, input?: DataType) {
+    this.name = name;
     if (input) {
       this.data = input;
       this.status = ModelStatus.DIRTY;

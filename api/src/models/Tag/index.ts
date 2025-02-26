@@ -13,17 +13,18 @@ export class Tag extends Entity<ITagData> {
    * @param input The data to initialize the model. If not provided, the data will be null.
    */
   constructor(input?: ITag) {
+    let tag_data: ITagData | undefined;
     if (input) {
-      super({
+      tag_data = {
         ...input,
         statistics: {
           total_bulbs: 0,
           total_children: 0,
         },
-      });
-    } else {
-      super();
+      };
     }
+
+    super('tag', tag_data);
   }
 
   /**

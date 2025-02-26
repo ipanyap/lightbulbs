@@ -13,16 +13,17 @@ export class Category extends Entity<ICategoryData> {
    * @param input The data to initialize the model. If not provided, the data will be null.
    */
   constructor(input?: ICategory) {
+    let category_data: ICategoryData | undefined;
     if (input) {
-      super({
+      category_data = {
         ...input,
         statistics: {
           total_bulbs: 0,
         },
-      });
-    } else {
-      super();
+      };
     }
+
+    super('category', category_data);
   }
 
   /**
