@@ -1,45 +1,46 @@
 import { Entity } from '../Entity';
 import { ModelStatus } from '../Entity/types';
-import { ReferenceOperator } from './operator';
-import { IReferenceOperator } from './operator/types';
-import { IReferenceData, IReference } from './types';
+import { ReferenceSourceOperator } from './operator';
+import { IReferenceSourceOperator } from './operator/types';
+import { IReferenceSourceData, IReferenceSource } from './types';
 
 /**
- * Class that models a reference and its related functionalities.
+ * Class that models a reference source and its related functionalities.
  */
-export class Reference extends Entity<IReferenceData> {
+export class ReferenceSource extends Entity<IReferenceSourceData> {
   /**
-   * Create a reference model instance.
+   * Create a reference source model instance.
    * @param input The data to initialize the model. If not provided, the data will be null.
    */
-  constructor(input?: IReference) {
+  constructor(input?: IReferenceSource) {
+    let reference_source_data: IReferenceSourceData | undefined;
     if (input) {
-      super({
+      reference_source_data = {
         ...input,
         statistics: {
           total_bulbs: 0,
         },
-      });
-    } else {
-      super();
+      };
     }
+
+    super('reference source', reference_source_data);
   }
 
   /**
-   * Edit the data in the `Reference` model. The change is not saved until `.save()` is called.
-   * @param input The reference data to be changed.
+   * Edit the data in the `ReferenceSource` model. The change is not saved until `.save()` is called.
+   * @param input The reference source data to be changed.
    * @returns Reference to `this` model instance.
    */
-  public setData(input: Partial<IReference>): Reference {
+  public setData(input: Partial<IReferenceSource>): ReferenceSource {
     // The function to set the data.
-    const edit_function = (data: IReferenceData | null): IReferenceData => {
+    const edit_function = (data: IReferenceSourceData | null): IReferenceSourceData => {
       if (!data) {
         /**
          * Model instance has no data: initialize with the given input.
          */
 
         // Assert that the input is sufficient to initialize the model's data.
-        assertReference(input);
+        assertReferenceSource(input);
 
         // Provide default attributes
         const default_attributes = {
@@ -77,9 +78,9 @@ export class Reference extends Entity<IReferenceData> {
    * Increment the total bulbs statistic. The change is not saved until `.save()` is called.
    * @returns Reference to `this` model instance.
    */
-  public increaseTotalBulbs(): Reference {
+  public increaseTotalBulbs(): ReferenceSource {
     // The function to increment total bulbs.
-    const increment_function = (data: IReferenceData | null, status: ModelStatus): IReferenceData => {
+    const increment_function = (data: IReferenceSourceData | null, status: ModelStatus): IReferenceSourceData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
         throw Error('Cannot increase total bulbs of empty data!');
@@ -100,9 +101,9 @@ export class Reference extends Entity<IReferenceData> {
    * Decrement the total bulbs statistic. The change is not saved until `.save()` is called.
    * @returns Reference to `this` model instance.
    */
-  public decreaseTotalBulbs(): Reference {
+  public decreaseTotalBulbs(): ReferenceSource {
     // The function to decrement total bulbs.
-    const decrement_function = (data: IReferenceData | null, status: ModelStatus): IReferenceData => {
+    const decrement_function = (data: IReferenceSourceData | null, status: ModelStatus): IReferenceSourceData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
         throw Error('Cannot decrease total bulbs of empty data!');
@@ -125,26 +126,26 @@ export class Reference extends Entity<IReferenceData> {
   }
 
   /**
-   * Provides a new database operator instance for reference model.
-   * @param input Either a record ID if loading existing reference data, or primary reference data if inserting new record.
-   * @returns Promise that resolves to the new reference operator instance.
+   * Provides a new database operator instance for reference source model.
+   * @param input Either a record ID if loading existing reference source data, or primary reference source data if inserting new record.
+   * @returns Promise that resolves to the new reference source operator instance.
    */
-  protected async createOperator(input: string | IReferenceData): Promise<IReferenceOperator> {
+  protected async createOperator(input: string | IReferenceSourceData): Promise<IReferenceSourceOperator> {
     if (typeof input === 'string') {
-      return await ReferenceOperator.retrieveOne({ id: input });
+      return await ReferenceSourceOperator.retrieveOne({ id: input });
     } else {
-      return await ReferenceOperator.create({ data: input });
+      return await ReferenceSourceOperator.create({ data: input });
     }
   }
 }
 
 /**
- * Function to assert whether an object contains valid reference data.
+ * Function to assert whether an object contains valid reference source data.
  * @param input The object to assert.
  * @throws Type assertion exception.
  */
-function assertReference(input: Partial<IReference>): asserts input is IReference {
+function assertReferenceSource(input: Partial<IReferenceSource>): asserts input is IReferenceSource {
   if (!input.name || !input.type) {
-    throw Error('The provided input is not a complete reference type!');
+    throw Error('The provided input is not a complete reference source type!');
   }
 }
