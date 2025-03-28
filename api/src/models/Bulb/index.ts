@@ -7,8 +7,14 @@ import { BulbOperator } from './operator';
 import { IBulbOperator } from './operator/types';
 import { IBulbData, IBulb } from './types';
 
+/**
+ * The type of reference in bulb's input type
+ */
 type IBulbReferenceInput = { source: ReferenceSource; detail: string | null };
 
+/**
+ * The input type for bulb, using other models
+ */
 type IBulbInput = Omit<IBulb, 'category' | 'references' | 'tags'> & {
   category: Category;
   references: Array<IBulbReferenceInput>;

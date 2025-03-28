@@ -126,7 +126,7 @@ export class ReferenceSource extends Entity<IReferenceSourceData> {
   }
 
   /**
-   * Provides a new database operator instance for source model.
+   * Provides a new database operator instance for reference source model.
    * @param input Either a record ID if loading existing reference source data, or primary reference source data if inserting new record.
    * @returns Promise that resolves to the new reference source operator instance.
    */
