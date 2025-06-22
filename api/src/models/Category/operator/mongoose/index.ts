@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { FilterQuery, HydratedDocument } from 'mongoose';
 import { MongoDBOperator } from '../../../Entity/operator/mongoose';
 import { ICategory, ICategoryData, ICategoryFilter } from '../../types';
@@ -120,7 +121,7 @@ async function loadCategoryDoc(id: string): Promise<HydratedDocument<ICategoryDa
   const doc = await CategoryModel.findById(id);
 
   if (!doc) {
-    throw 'Documents not found!';
+    throw new AppError('Documents not found!');
   }
 
   return doc;

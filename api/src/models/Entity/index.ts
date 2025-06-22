@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { IDatabaseOperator } from './operator/types';
 import { IBaseEntityData, ModelStatus } from './types';
 
@@ -80,7 +81,7 @@ export abstract class Entity<DataType extends IBaseEntityData> {
   public async save(): Promise<void> {
     // Cannot be performed on an EMPTY model.
     if (this.data === null || this.status === ModelStatus.EMPTY) {
-      throw Error('Cannot perform save with empty data!');
+      throw new AppError('Cannot perform save with empty data!');
     }
 
     if (this.operator === null) {
@@ -124,7 +125,7 @@ export abstract class Entity<DataType extends IBaseEntityData> {
    */
   public async reload(): Promise<void> {
     if (!this.operator) {
-      throw Error('Cannot reload: data has never been loaded previously!');
+      throw new AppError('Cannot reload: data has never been loaded previously!');
     }
 
     await this.load(this.operator.getID());

@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { FilterQuery, HydratedDocument, Types } from 'mongoose';
 import { MongoDBOperator } from '../../../Entity/operator/mongoose';
 import { IBulb, IBulbData, IBulbFilter } from '../../types';
@@ -189,7 +190,7 @@ async function loadBulbDoc(id: string): Promise<HydratedDocument<IRawBulbData>> 
   const doc = await BulbModel.findById(id);
 
   if (!doc) {
-    throw 'Documents not found!';
+    throw new AppError('Documents not found!');
   }
 
   return doc;
