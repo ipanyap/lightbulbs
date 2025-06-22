@@ -1,5 +1,6 @@
 import { ValidateFunction } from 'ajv';
 import fs from 'fs';
+import { AppError } from '../error';
 
 /**
  * The global object containing records of loaded config.
@@ -35,7 +36,7 @@ export function loadConfigFromJSONFile<ConfigType extends object>(input: {
    * If the config file exists, load and parse.
    */
   if (!fs.existsSync(source)) {
-    throw Error(`Config file for "${name}" is not found at ${source}`);
+    throw new AppError(`Config file for "${name}" is not found at ${source}`);
   }
 
   const raw_config = fs.readFileSync(source, 'utf8');
@@ -47,7 +48,7 @@ export function loadConfigFromJSONFile<ConfigType extends object>(input: {
    */
   if (validate) {
     if (validate(config) === false) {
-      throw Error(`Loaded config for "${name}" is invalid. Errors: ${JSON.stringify(validate.errors)}`);
+      throw new AppError(`Loaded config for "${name}" is invalid. Errors: ${JSON.stringify(validate.errors)}`);
     }
   }
 
