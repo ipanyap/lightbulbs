@@ -53,11 +53,6 @@ export const ReferenceSourceTypes = [
 ] as const;
 
 /**
- * Available string values for reference source type.
- */
-export type IReferenceSourceType = (typeof ReferenceSourceTypes)[number];
-
-/**
  * The primary `ReferenceSource` data.
  */
 export interface IReferenceSource {
