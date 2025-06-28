@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { FilterQuery, HydratedDocument, Types } from 'mongoose';
 import { MongoDBOperator } from '../../../Entity/operator/mongoose';
 import { ITag, ITagData, ITagFilter } from '../../types';
@@ -145,7 +146,7 @@ async function loadTagDoc(id: string): Promise<HydratedDocument<IRawTagData>> {
   const doc = await TagModel.findById(id);
 
   if (!doc) {
-    throw 'Documents not found!';
+    throw new AppError('Documents not found!');
   }
 
   return doc;

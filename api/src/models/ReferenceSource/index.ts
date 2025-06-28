@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { Entity } from '../Entity';
 import { ModelStatus } from '../Entity/types';
 import { ReferenceSourceOperator } from './operator';
@@ -83,7 +84,7 @@ export class ReferenceSource extends Entity<IReferenceSourceData> {
     const increment_function = (data: IReferenceSourceData | null, status: ModelStatus): IReferenceSourceData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot increase total bulbs of empty data!');
+        throw new AppError('Cannot increase total bulbs of empty data!');
       }
 
       data.statistics.total_bulbs++;
@@ -106,12 +107,12 @@ export class ReferenceSource extends Entity<IReferenceSourceData> {
     const decrement_function = (data: IReferenceSourceData | null, status: ModelStatus): IReferenceSourceData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot decrease total bulbs of empty data!');
+        throw new AppError('Cannot decrease total bulbs of empty data!');
       }
 
       // Cannot be performed on zero or negative total.
       if (data.statistics.total_bulbs <= 0) {
-        throw Error('Invalid operation: total bulbs has already reached 0');
+        throw new AppError('Invalid operation: total bulbs has already reached 0');
       }
 
       data.statistics.total_bulbs--;
@@ -146,6 +147,6 @@ export class ReferenceSource extends Entity<IReferenceSourceData> {
  */
 function assertReferenceSource(input: Partial<IReferenceSource>): asserts input is IReferenceSource {
   if (!input.name || !input.type) {
-    throw Error('The provided input is not a complete reference source type!');
+    throw new AppError('The provided input is not a complete reference source type!');
   }
 }

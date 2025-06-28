@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { FilterQuery, HydratedDocument } from 'mongoose';
 import { MongoDBOperator } from '../../../Entity/operator/mongoose';
 import { IReferenceSource, IReferenceSourceData, IReferenceSourceFilter } from '../../types';
@@ -138,7 +139,7 @@ async function loadReferenceSourceDoc(id: string): Promise<HydratedDocument<IRef
   const doc = await ReferenceSourceModel.findById(id);
 
   if (!doc) {
-    throw 'Documents not found!';
+    throw new AppError('Documents not found!');
   }
 
   return doc;

@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { Category } from '../Category';
 import { Entity } from '../Entity';
 import { ModelStatus } from '../Entity/types';
@@ -116,7 +117,7 @@ export class Bulb extends Entity<IBulbData> {
     const add_function = (data: IBulbData | null, status: ModelStatus): IBulbData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot add a reference to empty data!');
+        throw new AppError('Cannot add a reference to empty data!');
       }
 
       // Get source's identifier. The source should already exist in database.
@@ -124,7 +125,7 @@ export class Bulb extends Entity<IBulbData> {
 
       // Ensure the reference has not been in the list.
       if (data.references.findIndex((reference) => reference.source.id === source_id) !== -1) {
-        throw Error('The reference to add already belongs to the bulb!');
+        throw new AppError('The reference to add already belongs to the bulb!');
       }
 
       data.references.push({
@@ -152,7 +153,7 @@ export class Bulb extends Entity<IBulbData> {
     const remove_function = (data: IBulbData | null, status: ModelStatus): IBulbData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot remove a reference from empty data!');
+        throw new AppError('Cannot remove a reference from empty data!');
       }
 
       // Get source's identifier. The source should already exist in database.
@@ -161,7 +162,7 @@ export class Bulb extends Entity<IBulbData> {
       // Ensure the reference is found in the list.
       const reference_index = data.references.findIndex((reference) => reference.source.id === source_id);
       if (reference_index === -1) {
-        throw Error('The reference to remove does not belong to the bulb!');
+        throw new AppError('The reference to remove does not belong to the bulb!');
       }
 
       data.references.splice(reference_index, 1);
@@ -184,7 +185,7 @@ export class Bulb extends Entity<IBulbData> {
     const add_function = (data: IBulbData | null, status: ModelStatus): IBulbData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot add a tag to empty data!');
+        throw new AppError('Cannot add a tag to empty data!');
       }
 
       // Get tag's identifier. The tag should already exist in database.
@@ -192,7 +193,7 @@ export class Bulb extends Entity<IBulbData> {
 
       // Ensure the tag has not been in the list.
       if (data.tags.findIndex((tag) => tag.id === tag_id) !== -1) {
-        throw Error('The tag to add already belongs to the bulb!');
+        throw new AppError('The tag to add already belongs to the bulb!');
       }
 
       data.tags.push({
@@ -217,7 +218,7 @@ export class Bulb extends Entity<IBulbData> {
     const remove_function = (data: IBulbData | null, status: ModelStatus): IBulbData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot remove a tag from empty data!');
+        throw new AppError('Cannot remove a tag from empty data!');
       }
 
       // Get tag's identifier. The tag should already exist in database.
@@ -226,7 +227,7 @@ export class Bulb extends Entity<IBulbData> {
       // Ensure the tag is found in the list.
       const tag_index = data.tags.findIndex((tag) => tag.id === tag_id);
       if (tag_index === -1) {
-        throw Error('The tag to remove does not belong to the bulb!');
+        throw new AppError('The tag to remove does not belong to the bulb!');
       }
 
       data.tags.splice(tag_index, 1);
@@ -249,7 +250,7 @@ export class Bulb extends Entity<IBulbData> {
     const archive_function = (data: IBulbData | null, status: ModelStatus): IBulbData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot archive content of empty data!');
+        throw new AppError('Cannot archive content of empty data!');
       }
 
       // Push the current version to the beginning of the list of past versions
@@ -288,7 +289,7 @@ export class Bulb extends Entity<IBulbData> {
  */
 function assertBulb(input: Partial<IBulb>): asserts input is IBulb {
   if (!input.title || !input.content || !input.category || !input.category.id) {
-    throw Error('The provided input is not a complete bulb type!');
+    throw new AppError('The provided input is not a complete bulb type!');
   }
 }
 
@@ -301,7 +302,7 @@ function extractEntityID(entity: Category | ReferenceSource | Tag): string {
   const entity_id = entity.getID();
 
   if (entity_id === null) {
-    throw Error('The ' + entity.name + ' does not exist in database!');
+    throw new AppError('The ' + entity.name + ' does not exist in database!');
   }
 
   return entity_id;

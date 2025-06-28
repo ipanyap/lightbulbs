@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { Entity } from '../Entity';
 import { ModelStatus } from '../Entity/types';
 import { TagOperator } from './operator';
@@ -85,7 +86,7 @@ export class Tag extends Entity<ITagData> {
     const link_function = (data: ITagData | null, status: ModelStatus): ITagData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot link tag with empty data!');
+        throw new AppError('Cannot link tag with empty data!');
       }
 
       if (parent) {
@@ -93,9 +94,9 @@ export class Tag extends Entity<ITagData> {
         const parent_id = parent.getID();
 
         if (parent_id === null) {
-          throw Error('The tag referenced as parent does not exist in database!');
+          throw new AppError('The tag referenced as parent does not exist in database!');
         } else if (parent_id === data.id) {
-          throw Error('Cannot link a tag with itself!');
+          throw new AppError('Cannot link a tag with itself!');
         }
 
         data.parent = {
@@ -123,7 +124,7 @@ export class Tag extends Entity<ITagData> {
     const increment_function = (data: ITagData | null, status: ModelStatus): ITagData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot increase total bulbs of empty data!');
+        throw new AppError('Cannot increase total bulbs of empty data!');
       }
 
       data.statistics.total_bulbs++;
@@ -146,12 +147,12 @@ export class Tag extends Entity<ITagData> {
     const decrement_function = (data: ITagData | null, status: ModelStatus): ITagData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot decrease total bulbs of empty data!');
+        throw new AppError('Cannot decrease total bulbs of empty data!');
       }
 
       // Cannot be performed on zero or negative total.
       if (data.statistics.total_bulbs <= 0) {
-        throw Error('Invalid operation: total bulbs has already reached 0');
+        throw new AppError('Invalid operation: total bulbs has already reached 0');
       }
 
       data.statistics.total_bulbs--;
@@ -174,7 +175,7 @@ export class Tag extends Entity<ITagData> {
     const increment_function = (data: ITagData | null, status: ModelStatus): ITagData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot increase total children of empty data!');
+        throw new AppError('Cannot increase total children of empty data!');
       }
 
       data.statistics.total_children++;
@@ -197,12 +198,12 @@ export class Tag extends Entity<ITagData> {
     const decrement_function = (data: ITagData | null, status: ModelStatus): ITagData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot decrease total children of empty data!');
+        throw new AppError('Cannot decrease total children of empty data!');
       }
 
       // Cannot be performed on zero or negative total.
       if (data.statistics.total_children <= 0) {
-        throw Error('Invalid operation: total children has already reached 0');
+        throw new AppError('Invalid operation: total children has already reached 0');
       }
 
       data.statistics.total_children--;
@@ -237,6 +238,6 @@ export class Tag extends Entity<ITagData> {
  */
 function assertTag(input: Partial<ITag>): asserts input is ITag {
   if (!input.label) {
-    throw Error('The provided input is not a complete tag type!');
+    throw new AppError('The provided input is not a complete tag type!');
   }
 }

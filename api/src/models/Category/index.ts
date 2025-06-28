@@ -1,3 +1,4 @@
+import { AppError } from '@lightbulbs/common';
 import { Entity } from '../Entity';
 import { ModelStatus } from '../Entity/types';
 import { CategoryOperator } from './operator';
@@ -81,7 +82,7 @@ export class Category extends Entity<ICategoryData> {
     const increment_function = (data: ICategoryData | null, status: ModelStatus): ICategoryData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot increase total bulbs of empty data!');
+        throw new AppError('Cannot increase total bulbs of empty data!');
       }
 
       data.statistics.total_bulbs++;
@@ -104,12 +105,12 @@ export class Category extends Entity<ICategoryData> {
     const decrement_function = (data: ICategoryData | null, status: ModelStatus): ICategoryData => {
       // Cannot be performed on an EMPTY model.
       if (data === null || status === ModelStatus.EMPTY) {
-        throw Error('Cannot decrease total bulbs of empty data!');
+        throw new AppError('Cannot decrease total bulbs of empty data!');
       }
 
       // Cannot be performed on zero or negative total.
       if (data.statistics.total_bulbs <= 0) {
-        throw Error('Invalid operation: total bulbs has already reached 0');
+        throw new AppError('Invalid operation: total bulbs has already reached 0');
       }
 
       data.statistics.total_bulbs--;
@@ -144,6 +145,6 @@ export class Category extends Entity<ICategoryData> {
  */
 function assertCategory(input: Partial<ICategory>): asserts input is ICategory {
   if (!input.name) {
-    throw Error('The provided input is not a complete category type!');
+    throw new AppError('The provided input is not a complete category type!');
   }
 }

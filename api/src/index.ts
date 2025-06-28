@@ -13,6 +13,13 @@ const PORT = 3000;
     res.send('Hello World! I am API server');
   });
 
+  // Default error handling
+  app.use((error: Error, _req: Request, res: Response) => {
+    console.error(error);
+
+    res.status(500).json(error.message);
+  });
+
   app.listen(PORT, () => {
     console.log('Server is running at port', PORT);
   });
