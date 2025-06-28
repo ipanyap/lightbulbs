@@ -22,14 +22,14 @@ export class AppError extends Error {
    * @param input.message The error message
    * @param input.name The error name, pick one from list of common error names
    */
-  constructor(input: string | { message: string; name: ICommonErrorName });
+  constructor(input: { message: string; name: ICommonErrorName });
   /**
-   * @overload The custom way, specify user-defined values for both error name and code.
+   * @overload The full custom way, specify user-defined values for both error name and code.
    * @param input.message The error message
    * @param input.name The error name, can be any string
    * @param input.code The error code
    */
-  constructor(input: string | { message: string; name: string; code: AppErrorCode });
+  constructor(input: { message: string; name: string; code: AppErrorCode });
   constructor(input: string | { message: string; name: string; code?: AppErrorCode }) {
     if (typeof input === 'string') {
       super(input);

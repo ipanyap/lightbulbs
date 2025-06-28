@@ -1,5 +1,5 @@
 /**
- * The code of the application error.
+ * The category code of the application error.
  */
 export enum AppErrorCode {
   UNKNOWN = 'UNKNOWN',
