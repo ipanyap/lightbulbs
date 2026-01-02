@@ -3,5 +3,8 @@
   "editor.codeActionsOnSave": ["source.fixAll.eslint"],
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
-  "eslint.validate": ["javascript"]
+  "eslint.validate": ["javascript"],
+  "files.associations": {
+    "**/.mocharc.json": "jsonc"
+  }
 }
