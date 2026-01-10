@@ -28,6 +28,8 @@ const referenceSourceSchema = new Schema<IReferenceSourceData>(
       createdAt: 'created_at',
       updatedAt: 'updated_at',
     },
+    // Unique index is needed to prevent duplicates, updating index needs to be immediate
+    autoIndex: true,
   }
 );
 
