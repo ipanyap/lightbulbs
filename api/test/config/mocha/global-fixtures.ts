@@ -19,8 +19,8 @@ export async function mochaGlobalSetup() {
     });
 
     console.log(`[Global Setup] Test servers are now online!`);
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    console.error(e);
   }
 }
 
@@ -39,7 +39,7 @@ export async function mochaGlobalTeardown() {
     });
 
     console.log(`[Global Teardown] Test servers are now offline!`);
-  } catch (error) {
-    console.error(error);
+  } catch (e) {
+    console.error(e);
   }
 }

@@ -1,4 +1,4 @@
-import { IBaseEntityData } from '../types';
+import { IBaseEntityData, IEntityData } from '../types';
 
 /**
  * The common instance type for all database operators.
@@ -34,7 +34,7 @@ export interface IDatabaseOperator<EntityType extends IBaseEntityData> {
 /**
  * The common class type for all database operators.
  */
-export interface IDatabaseOperatorClass<DataType, EntityType extends IBaseEntityData & DataType, FilterType> {
+export interface IDatabaseOperatorClass<DataType, EntityType extends IEntityData<DataType>, FilterType = {}> {
   /**
    * @static
    * Insert a new record into database and create an operator object to access it.
