@@ -1,8 +1,6 @@
 import { downAll, upAll } from 'docker-compose';
 import path from 'path';
-// import url from 'url';
 
-// const directory = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '..');
 const directory = path.resolve(__dirname, '..');
 
 export async function mochaGlobalSetup() {
