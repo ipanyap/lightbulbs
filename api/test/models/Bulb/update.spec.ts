@@ -44,7 +44,7 @@ describe('Update a bulb', function () {
         expect(bulb.getData()).to.deep.equal(bulb_record);
       });
 
-      it('starts with a category to be added', async function () {
+      it('starts with a category to be switched to', async function () {
         const category_record = DB.records().categories[category_index];
 
         await category.load(category_record.id);
@@ -141,13 +141,14 @@ describe('Update a bulb', function () {
     const bulb = new Bulb();
 
     describe('# Arrange', function () {
-      it('starts with a loaded model', async function () {
+      it('starts with a loaded model with no past versions', async function () {
         const bulb_record = DB.records().bulbs[bulb_index];
 
         await bulb.load(bulb_record.id);
 
         expect(bulb.getStatus()).to.equal(ModelStatus.PRISTINE);
         expect(bulb.getData()).to.deep.equal(bulb_record);
+        expect(bulb.getData()?.past_versions).to.deep.equal([]);
       });
 
       it('starts with a reference source to be removed', async function () {

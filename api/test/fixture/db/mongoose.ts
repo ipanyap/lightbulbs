@@ -1,5 +1,5 @@
-import { BulbModel } from '../../../src/models/Bulb/operator/mongoose/schema';
 import { BulbOperator } from '../../../src/models/Bulb/operator';
+import { BulbModel } from '../../../src/models/Bulb/operator/mongoose/schema';
 import { IBulbOperator } from '../../../src/models/Bulb/operator/types';
 import { CategoryOperator } from '../../../src/models/Category/operator';
 import { CategoryModel } from '../../../src/models/Category/operator/mongoose/schema';
@@ -26,6 +26,9 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
 
   private data: IPopulatedEntities;
 
+  /**
+   * flag to indicate whether the fixture DB is ready to be used
+   */
   private is_usable: boolean;
 
   constructor() {
@@ -105,13 +108,12 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
     const tag_map: Record<string, string> = {};
     if (entities.includes(FixtureEntityType.TAG)) {
       for (const record of TAG_RECORDS) {
-        const data = { ...record };
-
-        if (record.parent) {
-          data.parent = { id: tag_map[record.parent.id] };
-        }
-
-        const operator = await TagOperator.create({ data });
+        const operator = await TagOperator.create({
+          data: {
+            ...record,
+            parent: record.parent ? { id: tag_map[record.parent.id] } : null,
+          },
+        });
 
         this.operators.tags.push(operator);
         tag_map[record.label] = operator.getID();
@@ -121,18 +123,17 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
     // Populate bulb data
     if (entities.includes(FixtureEntityType.BULB)) {
       for (const record of BULB_RECORDS) {
-        const data = { ...record };
-
-        data.category = { id: category_map[record.category.id] };
-
-        data.references = record.references.map((reference) => ({
-          ...reference,
-          source: { id: reference_source_map[reference.source.id] },
-        }));
-
-        data.tags = record.tags.map((tag) => ({ id: tag_map[tag.id] }));
-
-        const operator = await BulbOperator.create({ data });
+        const operator = await BulbOperator.create({
+          data: {
+            ...record,
+            category: { id: category_map[record.category.id] },
+            references: record.references.map((reference) => ({
+              ...reference,
+              source: { id: reference_source_map[reference.source.id] },
+            })),
+            tags: record.tags.map((tag) => ({ id: tag_map[tag.id] })),
+          },
+        });
 
         this.operators.bulbs.push(operator);
       }

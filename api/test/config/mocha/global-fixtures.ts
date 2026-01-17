@@ -33,7 +33,7 @@ export async function mochaGlobalTeardown() {
       executable: {
         standalone: true,
       },
-      commandOptions: ['--volumes', '--remove-orphans'],
+      commandOptions: ['--volumes', '--remove-orphans'], // clean up storage after container is down
     });
 
     console.log(`[Global Teardown] Test servers are now offline!`);

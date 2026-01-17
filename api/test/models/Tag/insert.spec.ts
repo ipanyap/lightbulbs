@@ -1,8 +1,8 @@
 import { expect } from 'chai';
+import { ModelStatus } from '../../../src/models/Entity/types';
 import { Tag } from '../../../src/models/Tag';
 import { TagOperator } from '../../../src/models/Tag/operator';
 import { ITagData } from '../../../src/models/Tag/types';
-import { ModelStatus } from '../../../src/models/Entity/types';
 import { getFixtureDatabaseClient } from '../../fixture/db';
 
 const DB = getFixtureDatabaseClient();
