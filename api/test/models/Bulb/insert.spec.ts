@@ -15,8 +15,7 @@ describe('Insert a bulb', function () {
   const bulb_basic_input = { title: 'Test Insertion', content: 'Hi this is my first bulb!' };
 
   before(async function () {
-    await DB.init();
-    await DB.populate([FixtureEntityType.CATEGORY, FixtureEntityType.REFERENCE_SOURCE, FixtureEntityType.TAG]);
+    await DB.init([FixtureEntityType.CATEGORY, FixtureEntityType.REFERENCE_SOURCE, FixtureEntityType.TAG]);
   });
 
   after(async function () {

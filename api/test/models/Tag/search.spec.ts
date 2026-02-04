@@ -7,8 +7,7 @@ const DB = getFixtureDatabaseClient();
 
 describe('Search tags', function () {
   before(async function () {
-    await DB.init();
-    await DB.populate([FixtureEntityType.TAG]);
+    await DB.init([FixtureEntityType.TAG]);
   });
 
   after(async function () {

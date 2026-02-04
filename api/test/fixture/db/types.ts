@@ -28,14 +28,10 @@ export interface IPopulatedEntities {
  */
 export type IFixtureDBClient = {
   /**
-   * Initialize the database to a usable state.
-   */
-  init: () => Promise<void>;
-  /**
-   * Populate the database with prepared test records.
+   * Initialize and populate the database with prepared test records.
    * @param entities List of fixture entities to populate.
    */
-  populate: (entities: Array<FixtureEntityType>) => Promise<void>;
+  init: (entities?: Array<FixtureEntityType>) => Promise<void>;
   /**
    * Retrieve the database records currently stored in the client (may be stale).
    * @returns The complete retrieved records.

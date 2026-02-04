@@ -8,8 +8,7 @@ const DB = getFixtureDatabaseClient();
 
 describe('Load a category', function () {
   before(async function () {
-    await DB.init();
-    await DB.populate([FixtureEntityType.CATEGORY]);
+    await DB.init([FixtureEntityType.CATEGORY]);
   });
 
   after(async function () {

@@ -8,8 +8,7 @@ const DB = getFixtureDatabaseClient();
 
 describe('Search reference sources', function () {
   before(async function () {
-    await DB.init();
-    await DB.populate([FixtureEntityType.REFERENCE_SOURCE]);
+    await DB.init([FixtureEntityType.REFERENCE_SOURCE]);
   });
 
   after(async function () {

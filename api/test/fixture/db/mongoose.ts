@@ -29,36 +29,18 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
   /**
    * flag to indicate whether the fixture DB is ready to be used
    */
-  private is_usable: boolean;
+  private is_active: boolean;
 
   constructor() {
     this.operators = { categories: [], reference_sources: [], tags: [], bulbs: [] };
     this.data = { categories: [], reference_sources: [], tags: [], bulbs: [] };
-    this.is_usable = false;
+    this.is_active = false;
   }
 
-  public async init() {
-    // Create indexes
-    const models_with_indexes = [CategoryModel, ReferenceSourceModel, TagModel];
-
-    for (const model of models_with_indexes) {
-      await model.createIndexes();
-    }
-
-    this.is_usable = true;
-  }
-
-  public async populate(entities: Array<FixtureEntityType>) {
-    // Validation: ensure the database is usable
-    if (!this.is_usable) {
-      throw new Error('DB is not active! Init the DB first.');
-    }
-
-    // Validation: ensure the database is not yet populated
-    for (const entity in this.operators) {
-      if (this.operators[entity as keyof typeof this.operators].length > 0) {
-        throw new Error('Populating an already populated DB is forbidden! Clear and re-init the DB first.');
-      }
+  public async init(entities: Array<FixtureEntityType> = []) {
+    // Validation: ensure the database is not in use
+    if (this.is_active) {
+      throw new Error('DB is already in use! Clear the DB first.');
     }
 
     // Validation: ensure there are no missing entity dependencies
@@ -80,6 +62,13 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
           `Populating BULB entity is missing the following dependencies: ${missing_dependencies.join(', ')}`
         );
       }
+    }
+
+    // Create indexes
+    const models_with_indexes = [CategoryModel, ReferenceSourceModel, TagModel];
+
+    for (const model of models_with_indexes) {
+      await model.createIndexes();
     }
 
     // Populate category data
@@ -140,6 +129,8 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
     }
 
     this.extract();
+
+    this.is_active = true;
   }
 
   public records() {
@@ -148,7 +139,7 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
 
   public async refresh() {
     // Validation: ensure the database is usable
-    if (!this.is_usable) {
+    if (!this.is_active) {
       throw new Error('DB is not active! Init the DB first.');
     }
 
@@ -180,7 +171,7 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
     // Reset member variables
     this.operators = { categories: [], reference_sources: [], tags: [], bulbs: [] };
     this.data = { categories: [], reference_sources: [], tags: [], bulbs: [] };
-    this.is_usable = false;
+    this.is_active = false;
   }
 
   /**

@@ -8,8 +8,7 @@ const DB = getFixtureDatabaseClient();
 
 describe('Load a bulb', function () {
   before(async function () {
-    await DB.init();
-    await DB.populate([
+    await DB.init([
       FixtureEntityType.CATEGORY,
       FixtureEntityType.REFERENCE_SOURCE,
       FixtureEntityType.TAG,
