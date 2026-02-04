@@ -160,7 +160,7 @@ describe('Insert a tag', function () {
         });
 
         it('inserts the record as a child of the existing tag', function () {
-          expect(tags[1].parent?.id).to.equal(tags[0].id);
+          expect(tags[1].parent).to.deep.equal({ id: tags[0].id });
         });
       });
     });

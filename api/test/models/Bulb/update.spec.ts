@@ -147,7 +147,7 @@ describe('Update a bulb', function () {
 
         expect(bulb.getStatus()).to.equal(ModelStatus.PRISTINE);
         expect(bulb.getData()).to.deep.equal(bulb_record);
-        expect(bulb.getData()?.past_versions).to.deep.equal([]);
+        expect(bulb.getData()).to.containSubset({ past_versions: [] });
       });
 
       it('starts with a reference source to be removed', async function () {
@@ -170,7 +170,7 @@ describe('Update a bulb', function () {
     describe('# Act', function () {
       it('archives the content', function () {
         const new_content = 'New content replacement';
-        const old_content = bulb.getData()?.content;
+        const old_content = DB.records().bulbs[bulb_index].content;
         bulb.archiveCurrentVersion().setData({ content: new_content });
 
         expect(bulb.getStatus()).to.equal(ModelStatus.DIRTY);
@@ -184,14 +184,14 @@ describe('Update a bulb', function () {
         bulb.removeReference(reference_source);
 
         expect(bulb.getStatus()).to.equal(ModelStatus.DIRTY);
-        expect(bulb.getData()?.references).to.deep.equal([]);
+        expect(bulb.getData()).to.containSubset({ references: [] });
       });
 
       it('removes a tag', function () {
         bulb.removeTag(tag);
 
         expect(bulb.getStatus()).to.equal(ModelStatus.DIRTY);
-        expect(bulb.getData()?.tags).to.deep.equal([]);
+        expect(bulb.getData()).to.containSubset({ tags: [] });
       });
 
       it('saves successfully', async function () {

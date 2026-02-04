@@ -92,7 +92,7 @@ describe('Update a tag', function () {
 
         expect(child_tag.getStatus()).to.equal(ModelStatus.PRISTINE);
         expect(child_tag.getData()).to.deep.equal(child_tag_record);
-        expect(child_tag.getData()?.parent).to.equal(null);
+        expect(child_tag.getData()).to.containSubset({ parent: null });
       });
 
       it('starts with a loaded model with no children', async function () {
@@ -102,7 +102,9 @@ describe('Update a tag', function () {
 
         expect(parent_tag.getStatus()).to.equal(ModelStatus.PRISTINE);
         expect(parent_tag.getData()).to.deep.equal(parent_tag_record);
-        expect(parent_tag.getData()?.statistics.total_children).to.equal(0);
+        expect(parent_tag.getData()).to.containSubset({
+          statistics: { total_children: 0 },
+        });
       });
     });
 
@@ -111,14 +113,18 @@ describe('Update a tag', function () {
         child_tag.linkTo(parent_tag);
 
         expect(child_tag.getStatus()).to.equal(ModelStatus.DIRTY);
-        expect(child_tag.getData()?.parent?.id).to.equal(parent_tag.getID());
+        expect(child_tag.getData()).to.containSubset({
+          parent: { id: parent_tag.getID() },
+        });
       });
 
       it('increases total children of the parent', function () {
         parent_tag.increaseTotalChildren();
 
         expect(parent_tag.getStatus()).to.equal(ModelStatus.DIRTY);
-        expect(parent_tag.getData()?.statistics.total_children).to.equal(1);
+        expect(parent_tag.getData()).to.containSubset({
+          statistics: { total_children: 1 },
+        });
       });
 
       it('saves successfully', async function () {
@@ -150,7 +156,7 @@ describe('Update a tag', function () {
       });
 
       it('updates the child tag to refer to parent tag in the database', function () {
-        expect(DB.records().tags[child_index].parent?.id).to.equal(parent_tag.getID());
+        expect(DB.records().tags[child_index].parent).to.deep.equal({ id: parent_tag.getID() });
       });
 
       it('updates the total children of the parent tag in the database', function () {
@@ -173,7 +179,9 @@ describe('Update a tag', function () {
 
         expect(parent_tag.getStatus()).to.equal(ModelStatus.PRISTINE);
         expect(parent_tag.getData()).to.deep.equal(parent_tag_record);
-        expect(parent_tag.getData()?.statistics.total_children).to.equal(1);
+        expect(parent_tag.getData()).to.containSubset({
+          statistics: { total_children: 1 },
+        });
       });
 
       it('starts with a loaded child model', async function () {
@@ -183,7 +191,9 @@ describe('Update a tag', function () {
 
         expect(child_tag.getStatus()).to.equal(ModelStatus.PRISTINE);
         expect(child_tag.getData()).to.deep.equal(child_tag_record);
-        expect(child_tag.getData()?.parent?.id).to.equal(parent_tag.getID());
+        expect(child_tag.getData()).to.containSubset({
+          parent: { id: parent_tag.getID() },
+        });
       });
     });
 
@@ -192,14 +202,16 @@ describe('Update a tag', function () {
         child_tag.linkTo(null);
 
         expect(child_tag.getStatus()).to.equal(ModelStatus.DIRTY);
-        expect(child_tag.getData()?.parent).to.equal(null);
+        expect(child_tag.getData()).to.containSubset({ parent: null });
       });
 
       it('decreases total children of the parent', function () {
         parent_tag.decreaseTotalChildren();
 
         expect(parent_tag.getStatus()).to.equal(ModelStatus.DIRTY);
-        expect(parent_tag.getData()?.statistics.total_children).to.equal(0);
+        expect(parent_tag.getData()).to.containSubset({
+          statistics: { total_children: 0 },
+        });
       });
 
       it('saves successfully', async function () {
