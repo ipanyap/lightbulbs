@@ -1,0 +1,10 @@
+{
+  "extension": ["spec.ts"] /* Only test files with extension .spec.ts (the convention used in Mocha) */,
+  "spec": "test/**/*.spec.ts" /* Recursively iterate sub-folders */,
+  "require": [
+    "ts-node/register" /* Register ts-node to run TS files */,
+    "./test/config/mocha/global-fixtures.ts",
+    "./test/config/mocha/root-hooks.ts"
+  ],
+  "timeout": 10000
+}

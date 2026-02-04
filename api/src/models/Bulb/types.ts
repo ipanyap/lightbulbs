@@ -32,8 +32,9 @@ export type IBulbData = IEntityData<IBulb>;
  * @todo this has limitations and cannot cover filtering operators beside string contains.
  */
 export type IBulbFilter = Partial<
-  Pick<IBulbData, 'title' | 'content' | 'tags'> & {
+  Pick<IBulbData, 'title' | 'content'> & {
     categories: Array<string>;
     references: Array<string>;
+    tags: Array<string>;
   }
 >;

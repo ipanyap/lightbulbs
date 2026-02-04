@@ -70,8 +70,8 @@ export class MongoDBBulbOperator extends MongoDBOperator<IBulbData, IRawBulbData
       }
       if (criteria.references) {
         filter.references = {
-          source: {
-            $elemMatch: {
+          $elemMatch: {
+            source_id: {
               $in: criteria.references.map((reference) => new Types.ObjectId(reference)),
             },
           },
@@ -80,14 +80,26 @@ export class MongoDBBulbOperator extends MongoDBOperator<IBulbData, IRawBulbData
       if (criteria.tags) {
         filter.tag_ids = {
           $elemMatch: {
-            $in: criteria.tags.map((tag) => new Types.ObjectId(tag.id)),
+            $in: criteria.tags.map((tag_id) => new Types.ObjectId(tag_id)),
           },
         };
       }
     }
 
     // Create a mongoose projection (fields to retrieve) string.
-    const projection = fields ? fields.join(' ') : null;
+    const projection = fields
+      ? fields
+          .map((field) => {
+            if (field === 'category') {
+              return 'category_id';
+            } else if (field === 'tags') {
+              return 'tag_ids';
+            }
+
+            return field;
+          })
+          .join(' ')
+      : null;
 
     // Execute MongoDB query.
     const docs = await BulbModel.find(filter, projection);
@@ -137,7 +149,7 @@ function extractBulbData(doc: HydratedDocument<IRawBulbData>): Partial<IBulbData
     }));
   }
   if (raw_data.past_versions !== undefined) {
-    data.past_versions = raw_data.past_versions;
+    data.past_versions = raw_data.past_versions.map(({ archived_at, content }) => ({ archived_at, content }));
   }
 
   return data;
