@@ -27,7 +27,7 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
   private data: IPopulatedEntities;
 
   /**
-   * flag to indicate whether the fixture DB is ready to be used
+   * The flag to indicate whether the fixture DB is ready to be used
    */
   private is_active: boolean;
 
@@ -66,7 +66,6 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
 
     // Create indexes
     const models_with_indexes = [CategoryModel, ReferenceSourceModel, TagModel];
-
     for (const model of models_with_indexes) {
       await model.createIndexes();
     }
@@ -128,8 +127,10 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
       }
     }
 
+    // Store data locally
     this.extract();
 
+    // Mark the client as active
     this.is_active = true;
   }
 
@@ -157,13 +158,13 @@ export class FixtureMongoDBClient implements IFixtureDBClient {
       await operator.refresh();
     }
 
+    // Update local data
     this.extract();
   }
 
   public async clear() {
     // Drop entity collections
     const models = [BulbModel, CategoryModel, ReferenceSourceModel, TagModel];
-
     for (const model of models) {
       await model.collection.drop();
     }
