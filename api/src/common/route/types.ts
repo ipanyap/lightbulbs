@@ -15,16 +15,24 @@ export enum HTTPMethod {
  * Dictionary of common application error names and their corresponding HTTP status codes.
  */
 export const APP_ERROR_HTTP_STATUS_CODES: Record<ICommonErrorName, number> = {
+  // Bad Request
   MissingInput: 400,
   InvalidInput: 400,
-  InvalidPrecondition: 409,
+  // Unauthorized
   UnauthorizedAccess: 401,
+  // Forbidden
   InsufficientPermission: 403,
+  // Not Found
   MissingData: 404,
+  // Conflict
+  InvalidPrecondition: 409,
+  // Bad Gateway
+  NoExternalResponse: 502,
+  // Gateway Timeout
+  InternalServiceOutage: 504,
+  // Internal Server Error
   InvalidData: 500,
   DatabaseOutage: 500,
-  InternalServiceOutage: 504,
-  NoExternalResponse: 502,
   MissingConfig: 500,
   InvalidConfig: 500,
 };

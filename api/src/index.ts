@@ -16,12 +16,22 @@ const PORT = 3000;
 
   app.use('/', router);
 
-  // Invalid URL handling.
-  app.use((_req: Request, res: Response) => {
-    res.status(404).send();
+  // Invalid URL handling
+  app.use((req: Request, res: Response) => {
+    console.error(`URL ${req.path} not found!`);
+
+    // Ensure the error is standardized.
+    const app_error = new AppError({
+      code: AppErrorCode.INPUT,
+      name: 'InvalidURL',
+      message: 'The URL for this resource is not found.',
+    });
+
+    // Format and send the response.
+    res.status(404).json(formatHTTPFailedResponse(app_error));
   });
 
-  // Default error handling.
+  // Default error handling
   app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error(error);
 
@@ -32,7 +42,7 @@ const PORT = 3000;
         : new AppError({
             code: AppErrorCode.UNKNOWN,
             name: 'AppError',
-            message: 'A problem has occurred',
+            message: 'A problem has occurred.',
           });
 
     // Derive the right HTTP status code.
