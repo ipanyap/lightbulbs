@@ -1,5 +1,8 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
+import { AppError, AppErrorCode } from '@lightbulbs/common';
 import { getDatabaseClient } from './common/db';
+import { formatHTTPFailedResponse, getHTTPStatusCode } from './common/route/response';
+import { router } from './routes';
 
 const PORT = 3000;
 
@@ -9,15 +12,34 @@ const PORT = 3000;
 
   const app: Express = express();
 
-  app.get('/', (_req: Request, res: Response) => {
-    res.send('Hello World! I am API server');
+  app.use(express.json());
+
+  app.use('/', router);
+
+  // Invalid URL handling.
+  app.use((_req: Request, res: Response) => {
+    res.status(404).send();
   });
 
-  // Default error handling
-  app.use((error: Error, _req: Request, res: Response) => {
+  // Default error handling.
+  app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error(error);
 
-    res.status(500).json(error.message);
+    // Ensure the error is standardized.
+    const app_error =
+      error instanceof AppError
+        ? error
+        : new AppError({
+            code: AppErrorCode.UNKNOWN,
+            name: 'AppError',
+            message: 'A problem has occurred',
+          });
+
+    // Derive the right HTTP status code.
+    const http_status_code = getHTTPStatusCode(app_error);
+
+    // Format and send the response.
+    res.status(http_status_code).json(formatHTTPFailedResponse(app_error));
   });
 
   app.listen(PORT, () => {

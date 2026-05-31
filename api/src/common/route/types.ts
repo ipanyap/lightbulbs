@@ -1,3 +1,4 @@
+import { ICommonErrorName } from '@lightbulbs/common';
 import { JSONSchemaType } from 'ajv';
 
 /**
@@ -9,6 +10,24 @@ export enum HTTPMethod {
   PUT = 'PUT',
   PATCH = 'PATCH',
 }
+
+/**
+ * Dictionary of common application error names and their corresponding HTTP status codes.
+ */
+export const APP_ERROR_HTTP_STATUS_CODES: Record<ICommonErrorName, number> = {
+  MissingInput: 400,
+  InvalidInput: 400,
+  InvalidPrecondition: 409,
+  UnauthorizedAccess: 401,
+  InsufficientPermission: 403,
+  MissingData: 404,
+  InvalidData: 500,
+  DatabaseOutage: 500,
+  InternalServiceOutage: 504,
+  NoExternalResponse: 502,
+  MissingConfig: 500,
+  InvalidConfig: 500,
+};
 
 /**
  * The standard HTTP response.
