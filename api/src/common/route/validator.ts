@@ -8,6 +8,8 @@ import { IWorkflowInput, IWorkflowJSONSchema } from './types';
  * Configure AJV behavior for request input validator.
  */
 const ajv = new AJV({
+  // Return immediately once the first error is found.
+  allErrors: false,
   // Cast the data value to match the defined type.
   coerceTypes: true,
   // Replace missing properties with default values.

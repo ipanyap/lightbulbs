@@ -38,7 +38,7 @@ export function formatHTTPFailedResponse(error: AppError): IHTTPResponse {
 /**
  * Determine the appropriate HTTP status code for the given application error.
  * @param error The generated or thrown application error.
- * @returns HTTP status code to return
+ * @returns HTTP status code to return.
  */
 export function getHTTPStatusCode(error: AppError): number {
   const { code, name } = error;
